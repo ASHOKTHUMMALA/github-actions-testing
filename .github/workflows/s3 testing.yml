@@ -1,5 +1,5 @@
 # 1234
-name: build
+name: pipeline to archieve artifact in S3
 
 on: [push, pull_request]
 
@@ -7,19 +7,22 @@ jobs:
   publish-s3-artifact:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: montudor/action-zip@v1
+      - name: checking out repo
+        uses: actions/checkout@v2
+      - name: converting repo to zip
+        uses: montudor/action-zip@v1
         with:
           args: zip -qq -r github-actions-testing.zip . -i /home/runner/work/github-actions-testing
-      - name: pwd
+      - name: checking out files
         run: |
           pwd
           ls -ltr
-        shell: bash   
-      - uses: shallwefootball/s3-upload-action@master
+        shell: bash
+      - name: uploading to s3  
+        uses: shallwefootball/s3-upload-action@master
         with:
           aws_key_id: ${{ secrets.AWSACCESSKEYID }}
           aws_secret_access_key: ${{ secrets.AWSSECRETKEY}}
           aws_bucket: ${{ secrets.S3_BUCKET_NAME }}
-          source_dir: "/home/runner/work/github-actions-testing/github-actions-testing/github-actions-testing.zip"
+          source_dir: "/home/runner/work/github-actions-testing/github-actions-testing"
           destination_dir: "/artifacts"
