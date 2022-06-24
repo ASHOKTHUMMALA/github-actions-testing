@@ -21,5 +21,5 @@ jobs:
           aws_key_id: ${{ secrets.AWSACCESSKEYID }}
           aws_secret_access_key: ${{ secrets.AWSSECRETKEY}}
           aws_bucket: ${{ secrets.S3_BUCKET_NAME }}
-          source_path: "/home/runner/work/github-actions-testing/github-actions-testing/github-actions-testing.zip"
-          destination_path: "/artifacts"
+          source_dir: "/home/runner/work/github-actions-testing/github-actions-testing/github-actions-testing.zip"
+          destination_dir: "/artifacts"
