@@ -16,14 +16,10 @@ jobs:
           pwd
           ls -ltr
         shell: bash   
-      - name: Upload to S3 as artifact
-        uses: zdurham/s3-upload-github-action@master
+      - uses: shallwefootball/s3-upload-action@master
         with:
-          args: --acl public-read
-        env:
-          FILE: "/home/runner/work/github-actions-testing/github-actions-testing/github-actions-testing.zip"
-          AWS_REGION: 'ap-south-1'
-          S3_BUCKET: ${{ secrets.S3_BUCKET_NAME }}
-          S3_KEY: ${{ secrets.S3_KEY }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWSACCESSKEYID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWSSECRETKEY }}
+          aws_access_key_id: ${{ secrets.AWSACCESSKEYID}}
+          aws_secret_access_key: ${{ secrets.AWSSECRETKEY}}
+          aws_s3_bucket_name: ${{ secrets.S3_BUCKET_NAME }}
+          source_path: "/home/runner/work/github-actions-testing/github-actions-testing/github-actions-testing.zip"
+          destination_path: "/artifacts"
