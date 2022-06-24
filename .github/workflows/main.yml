@@ -1,0 +1,20 @@
+name: build
+
+on: [push, pull_request]
+
+jobs:
+  publish-s3-artifact:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r github-actions-testing.zip github-actions-testing
+      - name: Upload to S3 as artifact
+        uses: medlypharmacy/s3-artifacts-action@master
+        with:
+          aws_access_key_id: ${{ secrets.AWSACCESSKEYID}}
+          aws_secret_access_key: ${{ secrets.AWSSECRETKEY}}
+          aws_s3_bucket_name: ${{ secrets.S3_BUCKET_NAME }}
+          source_path: "./github-actions-testing.zip"
+          destination_path: "/artifacts"
