@@ -7,19 +7,19 @@ jobs:
   publish-s3-artifact:
     runs-on: ubuntu-latest
     steps:
-      - name: checking out repo
-        uses: actions/checkout@v2
-      - name: converting repo to zip
-        uses: montudor/action-zip@v1
+      - uses: actions/checkout@v2
+        name: checking out repo
+      - uses: montudor/action-zip@v1
+        name: converting repo to zip
         with:
           args: zip -qq -r github-actions-testing.zip . -i /home/runner/work/github-actions-testing
       - name: checking out files
         run: |
           pwd
           ls -ltr
-        shell: bash
-      - name: uploading to s3  
-        uses: shallwefootball/s3-upload-action@master
+        shell: bash  
+      - uses: shallwefootball/s3-upload-action@master
+        name: uploading to s3      
         with:
           aws_key_id: ${{ secrets.AWSACCESSKEYID }}
           aws_secret_access_key: ${{ secrets.AWSSECRETKEY}}
