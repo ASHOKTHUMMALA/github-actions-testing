@@ -14,7 +14,7 @@ jobs:
       - name: converting repo to zip
         uses: montudor/action-zip@v0.1.0
         with:
-          args: zip -r ./artifacts/${{ github.repository }}/${{ github.sha }}.zip ./src
+          args: zip -r ./artifacts/${{ github.repository }}/${{ github.sha }}.zip ./
       - name: checking out files
         run: |
           pwd
