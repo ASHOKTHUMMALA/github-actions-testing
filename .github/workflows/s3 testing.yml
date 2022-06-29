@@ -7,22 +7,24 @@ jobs:
   publish-s3-artifact:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-        name: checking out repo
-      - uses: montudor/action-zip@v1
-        name: converting repo to zip
+      - name: checking out repo
+        uses: actions/checkout@v2
+      - name: Make artifact directory
+        run: mkdir -p ./artifacts/${{ github.repository }}
+      - name: converting repo to zip
+        uses: montudor/action-zip@v0.1.0
         with:
-          args: zip -qq -r github-actions-testing.zip . -i /home/runner/work/github-actions-testing
+          args: zip -r ./artifacts/${{ github.repository }}/${{ github.sha }}.zip ./src
       - name: checking out files
         run: |
           pwd
-          ls -ltr
-        shell: bash  
-      - uses: shallwefootball/s3-upload-action@master
-        name: uploading to s3      
-        with:
-          aws_key_id: ${{ secrets.AWSACCESSKEYID }}
-          aws_secret_access_key: ${{ secrets.AWSSECRETKEY}}
-          aws_bucket: ${{ secrets.S3_BUCKET_NAME }}
-          source_dir: "/home/runner/work/github-actions-testing/github-actions-testing"
-          destination_dir: "/artifacts"
+          ls -ltr ./artifacts
+        shell: bash
+      - name: Push Zip to S3
+        uses: jakejarvis/s3-sync-action@v0.3.1
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWSACCESSKEYID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWSSECRETKEY}}
+          AWS_S3_BUCKET: ${{ secrets.S3_BUCKET_NAME }}
+          SOURCE_DIR: './artifacts'
+          AWS_REGION: 'ap-south-1'
